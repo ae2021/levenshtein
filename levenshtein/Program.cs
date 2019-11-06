@@ -64,7 +64,7 @@ namespace levenshtein {
 		}
 	}
 	class Program {
-		static void Main(string[] args) {
+		static void Main() {
 			Console.WriteLine(Levenshtein.LevenshteinDistance("kitten", "sitting"));
 			Console.WriteLine(Levenshtein.LevenshteinDistance2("kitten", "sitting"));
 		}
