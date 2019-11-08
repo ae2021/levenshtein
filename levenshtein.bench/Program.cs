@@ -5,12 +5,13 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.CsProj;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
+using BenchmarkDotNet.Reports;
 
 namespace levenshtein.bench
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
 			var config = ManualConfig
 				.Create(DefaultConfig.Instance);
@@ -19,11 +20,11 @@ namespace levenshtein.bench
 					InProcessEmitToolchain.Instance  // Run in-process so you don't need a solution file. If this is part of a solution, replace with CsProjCoreToolchain.NetCoreApp21.
 				)
 			);
-				
-            var summary = BenchmarkRunner.Run<Benchmarks>(config);
+
+            Summary summary = BenchmarkRunner.Run<Benchmarks>(config);
         }
     }
-	
+
 	/// <summary>
 	/// The benchmarks to run
 	/// </summary>
@@ -34,7 +35,7 @@ namespace levenshtein.bench
 		{
 			throw new NotImplementedException("Replace this with the code to benchmark");
 		}
-		
+
 		[Benchmark]
 		public void B()
 		{

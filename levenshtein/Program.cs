@@ -71,7 +71,7 @@ namespace levenshtein {
 				if a.len >= b.len { a.len } else { b.len }
 			return (1.00 - f32(d) / f32(l)) * 100.00
 		} */
-		public static double levenshtein_distance_percentage(string s, string t) {
+		public static double Levenshtein_distance_percentage(string s, string t) {
 			//from https://github.com/vlang/v/blob/59378dce46c6d7c5dc712d5119f52559729239f1/vlib/strings/similarity.v
 			//Copyright Alexander Medvednikov (https://github.com/medvednikov) && joe-conigliaro (https://github.com/joe-conigliaro)
 			int distance = LevenshteinDistance2(s, t);
@@ -90,7 +90,7 @@ namespace levenshtein {
 		static void Main() {
 			Console.WriteLine(Levenshtein.LevenshteinDistance("kitten", "sitting"));
 			Console.WriteLine(Levenshtein.LevenshteinDistance2("kitten", "sitting"));
-			Console.WriteLine(Levenshtein.levenshtein_distance_percentage("kitten", "sitting"));
+			Console.WriteLine(Levenshtein.Levenshtein_distance_percentage("kitten", "sitting"));
 		}
 	}
 }
