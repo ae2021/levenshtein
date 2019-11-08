@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Win32.SafeHandles;
 
 //https://en.wikipedia.org/wiki/Levenshtein_distance
 
@@ -62,11 +63,34 @@ namespace levenshtein {
 			Console.WriteLine($"{string.Join(", ", f)}");
 			return f[f.Length - 1];
 		}
+		// use levenshtein distance algorithm to calculate
+		// how similar two strings are as a percentage (higher is closer)
+		/* pub fn levenshtein_distance_percentage(a, b string)f32 {
+			d: = levenshtein_distance(a, b)
+			l: =
+				if a.len >= b.len { a.len } else { b.len }
+			return (1.00 - f32(d) / f32(l)) * 100.00
+		} */
+		public static double levenshtein_distance_percentage(string s, string t) {
+			//from https://github.com/vlang/v/blob/59378dce46c6d7c5dc712d5119f52559729239f1/vlib/strings/similarity.v
+			//Copyright Alexander Medvednikov (https://github.com/medvednikov) && joe-conigliaro (https://github.com/joe-conigliaro)
+			int distance = LevenshteinDistance2(s, t);
+			int len;
+			if (s.Length >= t.Length) {
+				len = s.Length;
+			} else {
+				len = t.Length;
+			}
+			// Console.WriteLine(((double)distance / (double)len));
+			// Console.WriteLine((1.00 - distance / len));
+			return (1.00 - (double)distance / (double)len) * 100.00;
+		}
 	}
 	class Program {
 		static void Main() {
 			Console.WriteLine(Levenshtein.LevenshteinDistance("kitten", "sitting"));
 			Console.WriteLine(Levenshtein.LevenshteinDistance2("kitten", "sitting"));
+			Console.WriteLine(Levenshtein.levenshtein_distance_percentage("kitten", "sitting"));
 		}
 	}
 }
