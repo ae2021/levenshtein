@@ -1,5 +1,6 @@
 ﻿using System;
-using Microsoft.Win32.SafeHandles;
+using System.Collections.Generic;
+using System.IO;
 
 //https://en.wikipedia.org/wiki/Levenshtein_distance
 
@@ -61,7 +62,7 @@ namespace levenshtein {
 				}
 			}
 			//Console.WriteLine($"{string.Join(", ", f)}");
-			return f[^1];
+			return f[ ^ 1];
 		}
 		// use levenshtein distance algorithm to calculate
 		// how similar two strings are as a percentage (higher is closer)
@@ -78,11 +79,74 @@ namespace levenshtein {
 			return (1.00 - (double)distance / (double)len) * 100.00;
 		}
 	}
-	class Program {
-		static void Main() {
-			Console.WriteLine(Levenshtein.LevenshteinDistance("kitten", "sitting"));
-			Console.WriteLine(Levenshtein.LevenshteinDistance2("kitten", "sitting"));
-			Console.WriteLine(Levenshtein.Levenshtein_distance_percentage("kitten", "sitting"));
+
+	/*pub fn dice_coefficient(s1, s2 string) f32 {
+		if s1.len == 0 || s2.len == 0 { return 0.0 }
+		if s1 == s2 { return 1.0 }
+		if s1.len < 2 || s2.len < 2 { return 0.0 }
+		a := if s1.len > s2.len { s1 } else { s2 }
+		b := if a == s1 { s2 } else { s1 }
+		mut first_bigrams := map[string]int
+		for i := 0; i < a.len-1; i++ {
+			bigram := a[i..i+2]
+			q := if bigram in first_bigrams { first_bigrams[bigram]+1 } else { 1 }
+			first_bigrams[bigram] = q
+		}
+		mut intersection_size := 0
+		for i := 0; i < b.len-1; i++ {
+			bigram := b[i..i+2]
+			count := if bigram in first_bigrams { first_bigrams[bigram] } else { 0 }
+			if count > 0 {
+				first_bigrams[bigram] = count - 1
+				intersection_size++
+			}
+		}
+		return (2.0 * intersection_size) / (f32(a.len) + f32(b.len) - 2)
+	}*/
+	class DiceCoefficient {
+		// implementation of Sørensen–Dice coefficient.
+		// find the similarity between two strings.
+		// returns coefficient between 0.0 (not similar) and 1.0 (exact match).
+
+		static public double Dice_Coefficient(string s, string t) {
+			//from https://github.com/vlang/v/blob/59378dce46c6d7c5dc712d5119f52559729239f1/vlib/strings/similarity.v
+			//Copyright Alexander Medvednikov (https://github.com/medvednikov) && joe-conigliaro (https://github.com/joe-conigliaro)
+			if (s.Length == 0 || t.Length == 0) { return 0.00; }
+			if (s == t) { return 1.00; }
+			if (t.Length < 2 || s.Length < 2) { return 0.00; }
+			string a, b;
+			if (s.Length > t.Length) { a = s; } else { a = t; }
+			if (a == s) { b = t; } else { b = s; }
+			Dictionary<string, int> first_bigrams = new Dictionary<string, int>();
+			for (int i = 0; i < a.Length - 1; i++) {
+				string bigram = a[i..(i + 2)];
+				int q;
+				if (first_bigrams.ContainsKey(bigram)) {
+					q = first_bigrams[bigram] + 1;
+				} else { q = 1; }
+				first_bigrams[bigram] = q;
+			}
+			int intersection_size = 0;
+			for (int i = 0; i < b.Length - 1; i++) {
+				string bigram = b[i..(i + 2)];
+				int count;
+				if (first_bigrams.ContainsKey(bigram)) { count = first_bigrams[bigram] + 1; } else { count = 0; }
+				if (count > 0) {
+					first_bigrams[bigram] = count - 1;
+					intersection_size++;
+				}
+			}
+			return (2.00 * (double)intersection_size) / ((double)a.Length + (double)b.Length - 2);
+				//return (2.0 * intersection_size) / (f32(a.len) + f32(b.len) - 2)
+			}
+		}
+		class Program {
+			static void Main() {
+				Console.WriteLine(Levenshtein.LevenshteinDistance("kitten", "sitting"));
+				Console.WriteLine(Levenshtein.LevenshteinDistance2("kitten", "sitting"));
+				Console.WriteLine(Levenshtein.Levenshtein_distance_percentage("kitten", "sitting"));
+
+				Console.WriteLine(DiceCoefficient.Dice_Coefficient("kitten", "sitting"));
+			}
 		}
 	}
-}
